@@ -220,7 +220,7 @@ export const followOrUnfollow = async (req, res) => {
       await Promise.all([
         User.updateOne(
           { _id: followerId },
-          { $pull: { following: targetedUser } }
+          { $pull: { following: targetedUser._id } }
         ),
 
         User.updateOne(
@@ -239,11 +239,11 @@ export const followOrUnfollow = async (req, res) => {
       await Promise.all([
         User.updateOne(
           { _id: followerId },
-          { $push: { following: targetedUser } }
+          { $push: { following: targetedUser._id } }
         ),
 
         User.updateOne(
-          { id: targetedUser._id },
+          { _id: targetedUser._id },
           { $push: { follower: followerId } }
         ),
       ]);
@@ -254,6 +254,8 @@ export const followOrUnfollow = async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error);
+    res.status(400).json({
+      error: error.message,
+    });
   }
 };
