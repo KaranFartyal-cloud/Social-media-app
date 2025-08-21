@@ -1,4 +1,4 @@
-import User from "../models/user.model.js";
+import { User } from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import getDataUri from "../utils/dataUri.js";
@@ -27,7 +27,7 @@ export const register = async (req, res) => {
     await User.create({
       username,
       email,
-      hashedPassword,
+      password: hashedPassword,
     });
 
     return res.status(201).json({
@@ -78,7 +78,7 @@ export const login = async (req, res) => {
       email: user.email,
       profilePicture: user.profilePicture,
       bio: user.bio,
-      followers: user.followers,
+      followers: user.follower,
       following: user.following,
       posts: user.posts,
     };
@@ -113,7 +113,7 @@ export const logout = async (req, res) => {
 export const getProfile = async (req, res) => {
   try {
     const userId = req.params.id;
-    let user = User.findById(userId);
+    let user = await User.findById(userId).select("-password");
 
     return res.status(200).json({
       user,
@@ -128,15 +128,17 @@ export const editProfile = async (req, res) => {
   try {
     const userId = req.id;
     const { bio, gender } = req.body;
-    const profilePicture = req.file;
+    const profilePicture = req.file; //comes from multer req.file
     let cloudResponse;
 
     if (profilePicture) {
-      const fileUri = getDataUri(profilePicture);
-      cloudResponse = await cloudinary.uploader.upload(fileUri);
+      const fileUri = getDataUri(profilePicture); //getDatauri() gives a data uri string (long mumble jumble base 64 coded file which cloudinary.uploader expects)
+      // console.log(req.file);
+      cloudResponse = await cloudinary.uploader.upload(fileUri); //uploads to cloudinary and returns a response
+      // console.log(cloudResponse);
     }
 
-    const user = await User.findById(userId);
+    const user = await User.findById(userId).select("-password");
 
     if (!user) {
       return res.status(404).json({
