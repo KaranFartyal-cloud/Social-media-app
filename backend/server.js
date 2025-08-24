@@ -4,6 +4,8 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import userRoutes from "./routes/user.route.js";
+import messageRoutes from "./routes/message.route.js";
+import postRoutes from "./routes/post.route.js";
 
 dotenv.config();
 connectDB();
@@ -21,11 +23,13 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/post", postRoutes);
+app.use("/api/v1/message", messageRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).json({
     success: true,
-    message: "i am coming",
+    message: "api is running at this url",
   });
 });
 

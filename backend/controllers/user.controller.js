@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import getDataUri from "../utils/dataUri.js";
 import cloudinary from "../config/cloudinary.js";
+import { Post } from "../models/post.model.js";
 
 export const register = async (req, res) => {
   try {
@@ -15,7 +16,7 @@ export const register = async (req, res) => {
       });
     }
 
-    const user = await User.findOne({ email });
+    let user = await User.findOne({ email });
     if (user) {
       return res.status(400).json({
         message: "user already registered",
@@ -24,13 +25,14 @@ export const register = async (req, res) => {
     }
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    await User.create({
+    user = await User.create({
       username,
       email,
       password: hashedPassword,
     });
 
     return res.status(201).json({
+      user,
       success: true,
       message: "account created successfully",
     });
@@ -72,6 +74,16 @@ export const login = async (req, res) => {
       expiresIn: "1d",
     });
 
+    const populatedPost = await Promise.all(
+      user.posts.map(async (postId) => {
+        const post = await Post.findById(postId);
+
+        if (post.author.equals(user._id)) {
+          return post;
+        }
+      })
+    );
+
     user = {
       _id: user._id,
       username: user.username,
@@ -80,7 +92,7 @@ export const login = async (req, res) => {
       bio: user.bio,
       followers: user.follower,
       following: user.following,
-      posts: user.posts,
+      posts: populatedPost,
     };
 
     return res
