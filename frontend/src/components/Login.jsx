@@ -34,7 +34,7 @@ const Login = () => {
 
       console.log(data);
 
-      toast.success("🎉 Login successful!");
+      toast.success(`${data.user.username} is logged in`);
 
       navigate("/");
     } catch (error) {
