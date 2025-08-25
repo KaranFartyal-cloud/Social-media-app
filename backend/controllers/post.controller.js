@@ -121,37 +121,33 @@ export const getUserPost = async (req, res) => {
 
 export const likePost = async (req, res) => {
   try {
-    const { likeUserId } = req.id;
+    const likeUserId = req.id;
     const postId = req.params.id;
 
     const post = await Post.findById(postId);
     if (!post) {
-      return res.status(404).json({
-        message: "cant find post",
-      });
+      return res.status(404).json({ message: "Post not found" });
     }
 
-    //like by the login user logic
-
-    await post.updateOne({ $addToSet: { likes: likeUserId } });
-    await post.save();
-
-    //implement socket io for real time notification
+    // only add if not already liked
+    if (!post.likes.includes(likeUserId)) {
+      post.likes.push(likeUserId);
+      await post.save();
+    }
 
     return res.status(200).json({
-      message: "post liked",
+      post,
+      message: "Post liked",
       success: true,
     });
   } catch (error) {
-    res.status(400).json({
-      message: error.message,
-    });
+    res.status(400).json({ message: error.message });
   }
 };
 
 export const disLikePost = async (req, res) => {
   try {
-    const { disLikeUserId } = req.id;
+    const disLikeUserId = req.id;
     const postId = req.params.id;
 
     const post = await Post.findById(postId);
@@ -181,7 +177,7 @@ export const disLikePost = async (req, res) => {
 
 export const addComment = async (req, res) => {
   try {
-    const { postId } = req.params.id;
+    const postId = req.params.id;
     const userId = req.id;
     const { text } = req.body;
 
@@ -202,10 +198,13 @@ export const addComment = async (req, res) => {
       text,
       author: userId,
       post: postId,
-    }).populate({
+    });
+    await comment.populate({
       path: "author",
       select: "username profilePicture",
     });
+
+    await comment.save();
 
     post.comments.push(comment._id);
 
@@ -251,7 +250,7 @@ export const deletePost = async (req, res) => {
     const postId = req.params.id;
     const authorId = req.id;
 
-    const post = await post.findById(postId);
+    const post = await Post.findById(postId);
 
     if (!post) {
       return res.status(404).json({

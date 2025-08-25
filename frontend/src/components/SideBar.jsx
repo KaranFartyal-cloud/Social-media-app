@@ -13,9 +13,9 @@ const sideBarItems = [
   { icon: <Bell />, title: "Notification" },
   {
     icon: (
-      <Avatar>
+      <Avatar className="flex items-center">
         <AvatarImage
-          className="rounded-full h-6 w-6"
+          className="rounded-full h-6 w-6 "
           src="https://github.com/shadcn.png"
         />
         <AvatarFallback>Profile</AvatarFallback>
@@ -52,11 +52,14 @@ const SideBar = () => {
   return (
     <>
       <div className="left-0 top-0 px-4 fixed z-10 h-screen border-r border-gray-500 w-[16%]">
+        <div className="flex justify-center">
+          <img src="./writing.png" className="h-25 w-25 " alt="" />
+        </div>
         <div className="flex flex-col ">
           {sideBarItems.map((item, index) => (
             <div
               onClick={() => logOutHandler(item.title)}
-              className="flex  items-center gap-6 hover:bg-gray-300 cursor-pointer rounded-lg p-3 my-2"
+              className="flex   items-center gap-6 hover:bg-gray-300 cursor-pointer rounded-lg p-3 my-2"
               key={index}
             >
               {item.icon} <span>{item.title}</span>
