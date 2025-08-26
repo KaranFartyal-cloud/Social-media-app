@@ -4,8 +4,11 @@ import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { setAuthUser } from "../redux/authSlice";
 
 const Login = () => {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -31,6 +34,8 @@ const Login = () => {
         },
         config
       );
+
+      dispatch(setAuthUser(data.user));
 
       console.log(data);
 

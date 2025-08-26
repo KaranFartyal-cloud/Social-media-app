@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { Avatar } from "@/components/ui/avatar";
 import Comment from "./Comment";
+import { Heart, MessageCircle } from "lucide-react";
 
 const DialogComment = ({ id, avatar, name, caption, comments, postImage }) => {
-  // useEffect(() => {
-  //   console.log(comments);
-  // }, []);
+  useEffect(() => {
+    console.log(comments);
+  }, []);
 
   return (
     <div className="flex w-full max-w-5xl h-[600px]">
@@ -17,7 +18,6 @@ const DialogComment = ({ id, avatar, name, caption, comments, postImage }) => {
           className="w-full h-full object-contain bg-black"
         />
       </div>
-
       {/* Right Side: Comments */}
       <div className="flex w-1/2 flex-col">
         {/* Post Header */}
@@ -44,7 +44,7 @@ const DialogComment = ({ id, avatar, name, caption, comments, postImage }) => {
         </div>
 
         {/* Comments List (Scrollable) */}
-        <div className="ml-4 mt-3 flex-1 overflow-y-auto pr-3">
+        <div className="ml-4 mt-3 flex-1 overflow-y-scroll scrollbar-hide pr-3">
           {comments.map((comment) => (
             <Comment
               key={comment._id}
@@ -55,6 +55,13 @@ const DialogComment = ({ id, avatar, name, caption, comments, postImage }) => {
             />
           ))}
         </div>
+
+        {/* <div>
+          <div>
+            <Heart />
+            <MessageCircle/>
+          </div>
+        </div> */}
       </div>
     </div>
   );

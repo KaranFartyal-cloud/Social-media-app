@@ -4,31 +4,33 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-
-const sideBarItems = [
-  { icon: <House />, title: "Home" },
-  { icon: <Search />, title: "Search" },
-  { icon: <Send />, title: "Search" },
-  { icon: <Plus />, title: "Create" },
-  { icon: <Bell />, title: "Notification" },
-  {
-    icon: (
-      <Avatar className="flex items-center">
-        <AvatarImage
-          className="rounded-full h-6 w-6 "
-          src="https://github.com/shadcn.png"
-        />
-        <AvatarFallback>Profile</AvatarFallback>
-      </Avatar>
-    ),
-    title: "Profile",
-  },
-  { icon: <LogOut />, title: "Log out" },
-];
+import { useSelector } from "react-redux";
 
 const SideBar = () => {
+  const { user } = useSelector((store) => store.auth);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const sideBarItems = [
+    { icon: <House />, title: "Home" },
+    { icon: <Search />, title: "Search" },
+    { icon: <Send />, title: "Search" },
+    { icon: <Plus />, title: "Create" },
+    { icon: <Bell />, title: "Notification" },
+    {
+      icon: (
+        <Avatar className="flex items-center">
+          <AvatarImage
+            className="rounded-full h-6 w-6 object-cover object-center"
+            src={user && user.profilePicture}
+          />
+          <AvatarFallback>Profile</AvatarFallback>
+        </Avatar>
+      ),
+      title: "Profile",
+    },
+    { icon: <LogOut />, title: "Log out" },
+  ];
 
   const logOutHandler = async (title) => {
     if (title !== "Log out") {
