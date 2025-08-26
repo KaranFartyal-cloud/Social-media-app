@@ -51,7 +51,7 @@ const SideBar = () => {
   };
   return (
     <>
-      <div className="left-0 top-0 px-4 fixed z-10 h-screen border-r border-gray-500 w-[16%]">
+      <div className="left-0 top-0 px-4 fixed z-10 h-screen border-r border-gray-100 w-[16%]">
         <div className="flex justify-center">
           <img src="./writing.png" className="h-25 w-25 " alt="" />
         </div>
