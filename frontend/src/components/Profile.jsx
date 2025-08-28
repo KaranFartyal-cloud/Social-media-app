@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import {
   Dialog,
@@ -10,13 +10,16 @@ import {
 } from "@/components/ui/dialog";
 import { useParams } from "react-router-dom";
 import useGetUserProfile from "../hooks/useGetUserProfile";
+import DialogFollowing from "./DialogFollowing";
 
 const Profile = () => {
   const params = useParams();
   const userId = params.id;
   // console.log(userId);
   useGetUserProfile(userId);
-  const { userProfile } = useSelector((store) => store.auth);
+  const [open, setOpen] = useState(false);
+
+  const { userProfile, user } = useSelector((store) => store.auth);
 
   if (!userProfile) {
     return (
@@ -25,8 +28,13 @@ const Profile = () => {
   }
 
   const posts = userProfile.posts || [];
+  // console.log(user);
   // console.log(userProfile);
   // console.log(userProfile.posts);
+
+  const followUser = () => {
+    console.log("let's follow", user, userProfile); //start from here
+  };
 
   return (
     <div className="ml-[16%] w-[84%] flex justify-center">
@@ -44,10 +52,22 @@ const Profile = () => {
           {/* Profile Info */}
           <div className="flex-1">
             <div className="flex items-center justify-between gap-6 mb-4 w-[50%]">
-              <h2 className="text-2xl font-light">{userProfile.username}</h2>
+              <h2 className="text-2xl font-medium">{userProfile.username}</h2>
+              <button
+                onClick={followUser}
+                className="bg-[#4A5DF9] text-white h-[30px] w-[100px] rounded-lg"
+              >
+                Follow
+              </button>
               <button className="px-3 py-1 text-sm font-semibold border rounded-md">
                 Edit Profile
               </button>
+
+              <DialogFollowing
+                open={open}
+                setOpen={setOpen}
+                following={userProfile.following}
+              />
             </div>
             {/* Stats */}
             <div className="flex gap-8 mb-4">
@@ -63,7 +83,7 @@ const Profile = () => {
                 </span>{" "}
                 followers
               </p>
-              <p>
+              <p className="cursor-pointer" onClick={() => setOpen(true)}>
                 <span className="font-semibold">
                   {userProfile.following.length}
                 </span>{" "}

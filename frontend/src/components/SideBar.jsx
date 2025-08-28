@@ -14,6 +14,7 @@ const SideBar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
+  // console.log(user);
 
   const sideBarItems = [
     { icon: <House />, title: "Home" },
@@ -75,9 +76,9 @@ const SideBar = () => {
     <>
       <div className="left-0 top-0 px-4 fixed z-10 h-screen border-r border-gray-100 w-[16%]">
         <div className="flex justify-center">
-          {/* <img src="./writing.png" className="h-25 w-25 " alt="" />
-           */}
-          <p className="text-2xl font-semibold my-3 mb-3">Halo</p>
+          <img src="./writing.png" className="h-25 w-25 " alt="" />
+
+          {/* <p className="text-2xl font-semibold my-3 mb-3">Halo</p> */}
         </div>
         <div className="flex flex-col ">
           {sideBarItems.map((item, index) => (

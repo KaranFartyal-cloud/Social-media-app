@@ -1,21 +1,25 @@
 import React, { useEffect, useState } from "react";
 import Post from "./Post";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import useGetAllPosts from "../hooks/useGetAllPost";
 
 const Posts = () => {
-  const [posts, setPosts] = useState([]);
+  const { posts } = useSelector((store) => store.post);
+  const [refresh, setRefresh] = useState(false);
+  useGetAllPosts(refresh);
 
-  useEffect(() => {
-    async function getPost() {
-      const { data } = await axios.get("/api/v1/post/all");
-      console.log(data);
+  // useEffect(() => {
+  //   async function getPost() {
+  //     const { data } = await axios.get("/api/v1/post/all");
+  //     // console.log(data);
 
-      // console.log(data.posts);
-      setPosts(data.posts);
-    }
+  //     // console.log(data.posts);
+  //     setPosts(data.posts);
+  //   }
 
-    getPost();
-  }, []);
+  //   getPost();
+  // }, []);
 
   return (
     <div>
@@ -30,6 +34,8 @@ const Posts = () => {
           likes={item.likes.length}
           comments={item.comments}
           authorId={item.author._id}
+          refresh={refresh}
+          setRefresh={setRefresh}
         />
       ))}
     </div>

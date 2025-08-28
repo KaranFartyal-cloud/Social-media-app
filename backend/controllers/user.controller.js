@@ -126,9 +126,10 @@ export const getProfile = async (req, res) => {
   try {
     const userId = req.params.id;
     let user = await User.findById(userId).select("-password");
-    console.log(user);
+    // console.log(user);
     const populateUser = await user.populate({
-      path: "posts",
+      path: "posts follower following",
+      select: "name email profilePicture ",
     });
 
     return res.status(200).json({

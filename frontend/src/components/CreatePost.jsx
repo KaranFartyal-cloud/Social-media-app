@@ -12,28 +12,26 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { ImagePlay } from "lucide-react";
+import axios from "axios";
+import { VisuallyHidden } from "radix-ui";
+import useGetAllPosts from "../hooks/useGetAllPost";
 
 const CreatePost = ({ open, setOpen }) => {
   const { user } = useSelector((store) => store.auth);
+  const [refresh, setRefresh] = useState(false);
   const fileInputRef = useRef(null);
   const [caption, setCaption] = useState("");
+  const [photo, setPhoto] = useState(null);
+  const { posts, setPosts } = useSelector((store) => store.post);
+  // const getAllPosts = useGetAllPosts();
+  useGetAllPosts(refresh);
 
   const [preview, setPreview] = useState(null);
 
-  const createPostHandler = async (e) => {
-    e.preventDefault();
-
-    try {
-    } catch (error) {}
-  };
-
   const handleChange = (e) => {
     const file = e.target.files[0];
-    if (!file) {
-      toast.warning("please provide a photo");
-      return;
-    }
 
+    setPhoto(file);
     setPreview(URL.createObjectURL(file));
   };
 
@@ -41,7 +39,23 @@ const CreatePost = ({ open, setOpen }) => {
     e.preventDefault();
 
     try {
-    } catch (error) {}
+      const formData = new FormData();
+      formData.append("image", photo);
+      formData.append("caption", caption);
+
+      const { data } = await axios.post("/api/v1/post/addPost", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true, // important for sending cookies (auth)
+      });
+      // console.log(data);
+      setRefresh(!refresh);
+
+      setOpen(false);
+    } catch (error) {
+      toast.error("couldn't create the post");
+    }
   };
 
   const handleClick = () => {
@@ -50,6 +64,9 @@ const CreatePost = ({ open, setOpen }) => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
+      <VisuallyHidden.Root>
+        <DialogTitle>create post</DialogTitle>
+      </VisuallyHidden.Root>
       <DialogContent
         onInteractOutside={() => {
           setOpen(false);

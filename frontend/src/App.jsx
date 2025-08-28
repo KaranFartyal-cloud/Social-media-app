@@ -8,6 +8,8 @@ import MainLayout from "./components/mainLayout";
 import Home from "./components/Home";
 import NotFound from "./components/NotFound";
 import Profile from "./components/Profile";
+import path from "path";
+import Bookmark from "./components/Bookmark";
 
 const browserRouter = createBrowserRouter([
   {
