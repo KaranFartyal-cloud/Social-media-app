@@ -6,7 +6,7 @@ import { Outlet } from "react-router-dom";
 
 const Home = () => {
   return (
-    <div className="flex ">
+    <div className="flex justify-center">
       <div className="flex-grow ">
         <Feed />
         <Outlet />

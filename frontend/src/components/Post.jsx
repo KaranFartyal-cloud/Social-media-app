@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import DialogComment from "./DialogComment";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { useNavigate } from "react-router-dom";
 
 const Post = ({
   username,
@@ -20,8 +21,10 @@ const Post = ({
   likes,
   comments,
   id,
+  authorId,
 }) => {
   const [comment, setComment] = useState("");
+  const navigate = useNavigate();
 
   const handleCommentConfig = (e) => {
     const inputText = e.target.value;
@@ -30,6 +33,10 @@ const Post = ({
     } else {
       setComment("");
     }
+  };
+
+  const goToProfile = () => {
+    navigate(`/profile/${authorId}`);
   };
 
   return (
@@ -42,7 +49,9 @@ const Post = ({
             alt="User"
             className="w-10 h-10 rounded-full object-cover"
           />
-          <span className="font-semibold">{username}</span>
+          <span className="font-semibold" onClick={goToProfile}>
+            {username}
+          </span>
         </div>
 
         {/* Post Image */}

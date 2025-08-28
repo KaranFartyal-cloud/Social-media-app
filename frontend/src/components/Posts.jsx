@@ -8,6 +8,7 @@ const Posts = () => {
   useEffect(() => {
     async function getPost() {
       const { data } = await axios.get("/api/v1/post/all");
+      console.log(data);
 
       // console.log(data.posts);
       setPosts(data.posts);
@@ -28,6 +29,7 @@ const Posts = () => {
           id={item._id}
           likes={item.likes.length}
           comments={item.comments}
+          authorId={item.author._id}
         />
       ))}
     </div>

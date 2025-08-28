@@ -4,6 +4,7 @@ const authSlice = createSlice({
   name: "auth",
   initialState: {
     user: null,
+    userProfile: null,
   },
 
   reducers: {
@@ -11,8 +12,12 @@ const authSlice = createSlice({
     setAuthUser: (state, action) => {
       state.user = action.payload;
     },
+
+    setUserProfile: (state, action) => {
+      state.userProfile = action.payload;
+    },
   },
 });
 
-export const { setAuthUser } = authSlice.actions;
+export const { setAuthUser, setUserProfile } = authSlice.actions;
 export default authSlice.reducer; //in store it expects the reducer not the whole slice (pitfall)
