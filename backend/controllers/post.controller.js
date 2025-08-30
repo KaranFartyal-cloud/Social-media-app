@@ -121,7 +121,7 @@ export const getUserPost = async (req, res) => {
 
 export const likePost = async (req, res) => {
   try {
-    const { likeUserId } = req.id;
+    const likeUserId = req.id;
     const postId = req.params.id;
 
     const post = await Post.findById(postId);
@@ -151,7 +151,7 @@ export const likePost = async (req, res) => {
 
 export const disLikePost = async (req, res) => {
   try {
-    const { disLikeUserId } = req.id;
+    const disLikeUserId = req.id;
     const postId = req.params.id;
 
     const post = await Post.findById(postId);
@@ -181,43 +181,51 @@ export const disLikePost = async (req, res) => {
 
 export const addComment = async (req, res) => {
   try {
-    const { postId } = req.params.id;
+    const postId = req.params.id;
     const userId = req.id;
     const { text } = req.body;
 
     const post = await Post.findById(postId);
     if (!post) {
       return res.status(404).json({
-        message: "can't find post",
+        message: "Post not found",
+        success: false,
       });
     }
 
     if (!text) {
       return res.status(400).json({
-        message: "text is required",
+        message: "Text is required",
+        success: false,
       });
     }
 
-    const comment = await Comment.create({
+    // Create the comment
+    let comment = await Comment.create({
       text,
       author: userId,
       post: postId,
-    }).populate({
+    });
+
+    // Populate author details
+    comment = await comment.populate({
       path: "author",
       select: "username profilePicture",
     });
 
+    // Push into post comments array
     post.comments.push(comment._id);
-
     await post.save();
 
     return res.status(201).json({
-      message: "comment added",
+      message: "Comment added",
+      success: true,
       comment,
     });
   } catch (error) {
     return res.status(400).json({
       message: error.message,
+      success: false,
     });
   }
 };
@@ -251,7 +259,7 @@ export const deletePost = async (req, res) => {
     const postId = req.params.id;
     const authorId = req.id;
 
-    const post = await post.findById(postId);
+    const post = await Post.findById(postId);
 
     if (!post) {
       return res.status(404).json({
