@@ -3,9 +3,13 @@ import { Outlet } from "react-router-dom";
 import Feed from "./Feed";
 import RightSidebar from "./RightSidebar";
 import useGetAllPost from "../hooks/useGetAllPost";
+import useGetSuggestedUsers from "../hooks/useGetSuggestedUsers";
 
 const Home = () => {
-  useGetAllPost()
+  useGetAllPost();
+  useGetSuggestedUsers();
+
+  
   return (
     <div className="flex ">
       <div className="flex-grow">

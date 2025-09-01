@@ -127,6 +127,15 @@ export const getProfile = async (req, res) => {
     const userId = req.params.id;
     let user = await User.findById(userId).select("-password");
 
+    await user.populate({
+      path: "posts",
+      options: { sort: { createdAt: -1 } },
+    });
+
+    await user.populate({
+      path: "bookmarks",
+    });
+
     return res.status(200).json({
       user,
       success: true,

@@ -42,6 +42,10 @@ const SideBar = () => {
       logOutHandler();
     } else if (title === "Create") {
       setOpen(true);
+    } else if (title === "Profile") {
+      navigate(`profile/${user._id}`);
+    } else if (title == "Home") {
+      navigate("/");
     }
   };
 
@@ -68,6 +72,7 @@ const SideBar = () => {
       <div className="left-0 top-0 px-4 fixed z-10 h-screen border-r border-gray-500 w-[16%]">
         <div className="flex flex-col ">
           <h1 className="mt-8 pl-3 font-bold text-xl">LOGO</h1>
+
           {sideBarItems.map((item, index) => (
             <div
               onClick={() => sideBarHandler(item.title)}

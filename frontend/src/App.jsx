@@ -8,22 +8,25 @@ import MainLayout from "./components/mainLayout";
 import Home from "./components/Home";
 import NotFound from "./components/NotFound";
 import Profile from "./components/Profile";
-
+import EditProfile from "./components/EditProfile";
 
 const browserRouter = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout />,//this guy will remain constant in its children
+    element: <MainLayout />, //this guy will remain constant in its children
     children: [
       {
         path: "/",
         element: <Home />,
       },
       {
-        path: "/profile",
-        element: <Profile />
+        path: "/profile/:id",
+        element: <Profile />,
       },
-      
+      {
+        path: "/account/edit",
+        element: <EditProfile />,
+      },
     ],
   },
   {

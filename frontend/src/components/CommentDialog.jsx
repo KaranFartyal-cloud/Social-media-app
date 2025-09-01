@@ -23,9 +23,9 @@ const CommentDialog = ({ open, setOpen }) => {
   const [text, setText] = useState("");
   const [comment, setComment] = useState(selectedPost?.comments || null);
 
-  useEffect(() => {
-    console.log(comment);
-  });
+  // useEffect(() => {
+  //   console.log(comment);
+  // });
 
   const changeEventHandler = (e) => {
     const inputText = e.target.value;
@@ -76,7 +76,7 @@ const CommentDialog = ({ open, setOpen }) => {
         }}
         className="p-0 h-[500px] w-full !max-w-5xl flex flex-col "
       >
-        <div className="flex flex-1">
+        <div className="flex flex-1 overflow-hidden">
           <div className="w-1/2">
             <img
               src={selectedPost?.image}

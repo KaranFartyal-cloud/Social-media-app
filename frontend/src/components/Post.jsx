@@ -9,6 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
 import { Bookmark, MessageCircle, MoreHorizontal, Send } from "lucide-react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import CommentDialog from "./CommentDialog";
@@ -119,7 +120,12 @@ const Post = ({ post }) => {
             />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
-          <h1 className="font-semibold">{post.author.username}</h1>
+          <div className="flex gap-2 items-center">
+            <h1 className="font-semibold">{post.author.username}</h1>
+            {post.author._id === user._id && (
+              <Badge variant="secondary">Author</Badge>
+            )}
+          </div>
         </div>
         <Dialog>
           <DialogTrigger asChild>
