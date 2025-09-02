@@ -14,8 +14,8 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState("posts");
 
   const { user, userProfile } = useSelector((store) => store.auth);
-  const isLoggedInUserProfile = user._id === userProfile._id;
-  const isFollowing = user?.following.includes(userProfile._id);
+  const isLoggedInUserProfile = user?._id === userProfile?._id;
+  const isFollowing = user?.following.includes(userProfile?._id);
 
   // console.log(userProfile);
 
@@ -44,7 +44,7 @@ const Profile = () => {
           </section>
           <section>
             <div className="flex flex-col gap-5">
-              <div className="flex items-center gap-3">
+              <div className="flex font-semibold items-center gap-3">
                 <span>{userProfile?.username}</span>
                 {isLoggedInUserProfile ? (
                   <>
@@ -119,9 +119,7 @@ const Profile = () => {
               </div>
 
               <div className="flex flex-col gap-1">
-                <span className="font-semibold">
-                  {userProfile?.bio || "bio here...."}
-                </span>
+                <span className="">{userProfile?.bio || "bio here...."}</span>
                 <Badge className="w-fit" variant="secondary">
                   <AtSign />
                   {userProfile?.username}
@@ -153,9 +151,9 @@ const Profile = () => {
           <div className="grid grid-cols-3 gap-1">
             {displayedPost?.map((post) => {
               return (
-                <div key={post._id} className="relative group cursor-pointer">
+                <div key={post?._id} className="relative group cursor-pointer">
                   <img
-                    src={post.image}
+                    src={post?.image}
                     alt="post image"
                     className="rounded-sm my-2 w-full aspect-square object-cover"
                   />

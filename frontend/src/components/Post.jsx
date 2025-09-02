@@ -114,7 +114,7 @@ const Post = ({ post }) => {
         <div className="flex items-center gap-2">
           <Avatar>
             <AvatarImage
-              src={post.author.profilePicture}
+              src={post?.author.profilePicture}
               alt="post-image"
               className="object-cover"
             />

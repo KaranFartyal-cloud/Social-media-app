@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true },
     profilePicture: { type: String, default: "" },
     bio: { type: String, default: "" },
-    gender: { type: String, enum: ["male", "female"] },
+    gender: { type: String, enum: ["male", "female"], lowercase: true },
     follower: [
       {
         type: mongoose.Schema.Types.ObjectId,

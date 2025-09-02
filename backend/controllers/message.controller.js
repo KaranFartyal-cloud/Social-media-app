@@ -12,7 +12,7 @@ export const sendMessage = async (req, res) => {
     });
 
     if (!conversation) {
-      conversation.create({
+      conversation = await Conversation.create({
         participants: [senderId, receiverId],
       });
     }
@@ -47,7 +47,7 @@ export const getMessage = async (req, res) => {
     const senderId = req.id;
     const receiverId = req.params.id;
 
-    const conversation = await Conversation.find({
+    const conversation = await Conversation.findOne({
       participants: { $all: [senderId, receiverId] },
     });
 
@@ -56,6 +56,10 @@ export const getMessage = async (req, res) => {
         success: true,
         message: [],
       });
+
+    await conversation.populate({
+      path: "messages",
+    });
 
     return res.status(200).json({
       success: true,

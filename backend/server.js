@@ -6,11 +6,12 @@ import connectDB from "./config/db.js";
 import userRoutes from "./routes/user.route.js";
 import messageRoutes from "./routes/message.route.js";
 import postRoutes from "./routes/post.route.js";
+import { app, server } from "./socket/socket.js";
 
 dotenv.config();
 connectDB();
 const port = process.env.PORT || 3000;
-const app = express();
+
 
 app.use(express.json());
 app.use(cookieParser());
@@ -33,6 +34,6 @@ app.get("/", (req, res) => {
   });
 });
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`app is listening at port ${port}`);
 });

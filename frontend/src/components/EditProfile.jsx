@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -11,13 +11,63 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Loader2Icon } from "lucide-react";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { setAuthUser } from "../redux/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const EditProfile = () => {
   const imgRef = useRef();
   const { user } = useSelector((store) => store.auth);
   const [loading, setLoading] = useState(false);
+  const [bio, setBio] = useState(user?.bio);
+  const [file, setFile] = useState(null);
+  const [gender, setGender] = useState(user?.gender);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const editProfileHandler = async (req, res) => {};
+  const selectChangeHandler = (e) => {
+    const selFile = e.target.files[0];
+    setFile(selFile);
+  };
+
+  const editProfileHandler = async () => {
+    const formData = new FormData();
+    formData.append("bio", bio);
+    formData.append("gender", gender);
+    if (file) formData.append("profilePicture", file);
+
+    try {
+      setLoading(true);
+      const res = await axios.post("/api/v1/user/profile/edit", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+
+        withCredentials: true,
+      });
+      setLoading(false);
+
+      if (res.data.success) {
+        const updatedUserData = {
+          ...user,
+          bio: res.data.user?.bio,
+          gender: res.data.user?.gender,
+          profilePicture: res.data.user?.profilePicture,
+        };
+
+        dispatch(setAuthUser(updatedUserData));
+        navigate(`/profile/${user._id}`);
+
+        toast.success(res.data.message);
+      }
+    } catch (error) {
+      toast.error("couldn't update profile");
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="max-w-2xl pl-10  mx-auto">
@@ -37,7 +87,12 @@ const EditProfile = () => {
               <span className="text-gray-600">{user.bio}</span>
             </div>
           </div>
-          <input ref={imgRef} type="file" className="hidden" />
+          <input
+            ref={imgRef}
+            type="file"
+            className="hidden"
+            onChange={(e) => selectChangeHandler(e)}
+          />
           <Button
             onClick={() => imgRef.current.click()}
             className="bg-[#0095F6] h-8 hover:bg-[#40aff9]"
@@ -48,16 +103,22 @@ const EditProfile = () => {
 
         <div>
           <h1 className="font-bold  mb-2">Bio</h1>
-          <Textarea name="bio" className="focus-visible:ring-transparent" />
+          <Textarea
+            value={bio}
+            onChange={(e) => setBio(e.target.value)}
+            name="bio"
+            className="focus-visible:ring-transparent"
+          />
         </div>
         <div>
           <h1 className="font-bold mb-2">Gender</h1>
-          <Select>
-            <SelectTrigger className="w-[180px]"></SelectTrigger>
+          <Select value={gender} onValueChange={(value) => setGender(value)}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Gender" />
+            </SelectTrigger>
             <SelectContent>
-              <SelectItem value="light">Light</SelectItem>
-              <SelectItem value="dark">Dark</SelectItem>
-              <SelectItem value="system">System</SelectItem>
+              <SelectItem value="Male">Male</SelectItem>
+              <SelectItem value="Female">Female</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -72,7 +133,10 @@ const EditProfile = () => {
             </>
           ) : (
             <>
-              <Button className="w-ft bg-[#0095F6] hover:bg-[#0075c4]">
+              <Button
+                onClick={() => editProfileHandler()}
+                className="w-ft bg-[#0095F6] hover:bg-[#0075c4]"
+              >
                 Submit
               </Button>
             </>
