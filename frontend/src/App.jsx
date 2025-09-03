@@ -15,6 +15,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setSocket } from "./redux/socketSlice";
 import { setOnineUsers } from "./redux/chatSlice";
+import { setNotification } from "./redux/rtnslice";
 
 const browserRouter = createBrowserRouter([
   {
@@ -72,12 +73,16 @@ function App() {
 
       socketio.on("getOnlineUsers", (onlineUsers) => {
         dispatch(setOnineUsers(onlineUsers));
-
-        return () => {
-          socketio.close();
-          dispatch(setSocket(null));
-        };
       });
+
+      socketio.on("notification", (notification) => {
+        dispatch(setNotification(notification));
+      });
+
+      return () => {
+        socketio.close();
+        dispatch(setSocket(null));
+      };
     } else {
       if (socket) {
         socket.close();

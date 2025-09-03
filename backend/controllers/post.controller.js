@@ -138,7 +138,9 @@ export const likePost = async (req, res) => {
     await post.save();
 
     //implement socket io for real time notification
-    const user = User.findById(likeUserId).select("username proilePicture");
+    const user = await User.findById(likeUserId).select(
+      "username profilePicture"
+    );
     const postOwnerId = post.author.toString();
 
     if (postOwnerId !== likeUserId) {
@@ -183,12 +185,14 @@ export const disLikePost = async (req, res) => {
     await post.save();
 
     //implement socket io for real time notification
-    const user = User.findById(disLikeUserId).select("username proilePicture");
+    const user = await User.findById(disLikeUserId).select(
+      "username profilePicture"
+    );
     const postOwnerId = post.author.toString();
 
     if (postOwnerId !== disLikeUserId) {
       const notification = {
-        type: "disliked",
+        type: "dislike",
         userId: disLikeUserId,
         userDetails: user,
         postId,

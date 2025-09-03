@@ -8,6 +8,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAuthUser } from "../redux/authSlice";
 import CreatePost from "./CreatePost";
 import { setPosts, setSelectedPost } from "../redux/postSlice";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { setNotification } from "../redux/rtnslice";
 
 const SideBar = () => {
   const { user } = useSelector((store) => store.auth);
@@ -15,6 +22,7 @@ const SideBar = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
+  const { notification } = useSelector((store) => store.realTimeNotification);
 
   const sideBarItems = [
     { icon: <House />, title: "Home" },
@@ -82,6 +90,51 @@ const SideBar = () => {
               key={index}
             >
               {item.icon} <span>{item.title}</span>
+              {item.title === "Notification" && notification.length > 0 && (
+                <>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        size="icon"
+                        className="rounded-full h-5 w-5  bottom-6 left-6 bg-red-500"
+                      >
+                        {notification.length}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent>
+                      <div>
+                        {notification.length === 0 ? (
+                          <div>No new Notifications</div>
+                        ) : (
+                          <div className="flex flex-col gap-3">
+                            {notification.map((notifi) => {
+                              return (
+                                <div
+                                  className="flex items-center gap-2"
+                                  key={notifi.userId}
+                                >
+                                  <Avatar>
+                                    <AvatarImage
+                                      className="object-cover"
+                                      src={notifi.userDetails?.profilePicture}
+                                    />
+                                  </Avatar>
+                                  <p className="text-sm">
+                                    <span className="font-bold">
+                                      {notifi.userDetails?.username}
+                                    </span>{" "}
+                                    liked your post
+                                  </p>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                </>
+              )}
             </div>
           ))}
         </div>
