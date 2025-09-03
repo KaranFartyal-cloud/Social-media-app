@@ -19,7 +19,7 @@ const SideBar = () => {
   const sideBarItems = [
     { icon: <House />, title: "Home" },
     { icon: <Search />, title: "Search" },
-    { icon: <Send />, title: "Search" },
+    { icon: <Send />, title: "Message" },
     { icon: <Plus />, title: "Create" },
     { icon: <Bell />, title: "Notification" },
     {
@@ -46,6 +46,8 @@ const SideBar = () => {
       navigate(`profile/${user._id}`);
     } else if (title == "Home") {
       navigate("/");
+    } else if (title == "Message") {
+      navigate("/chat");
     }
   };
 
