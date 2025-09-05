@@ -16,27 +16,49 @@ import { useDispatch, useSelector } from "react-redux";
 import { setSocket } from "./redux/socketSlice";
 import { setOnineUsers } from "./redux/chatSlice";
 import { setNotification } from "./redux/rtnslice";
+import ProtectedRoutes from "./components/ProtectedRoutes";
 
 const browserRouter = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout />, //this guy will remain constant in its children
+    element: (
+      <ProtectedRoutes>
+        {" "}
+        <MainLayout />
+      </ProtectedRoutes>
+    ), //this guy will remain constant in its children
     children: [
       {
         path: "/",
-        element: <Home />,
+        element: (
+          <ProtectedRoutes>
+            <Home />
+          </ProtectedRoutes>
+        ),
       },
       {
         path: "/profile/:id",
-        element: <Profile />,
+        element: (
+          <ProtectedRoutes>
+            <Profile />
+          </ProtectedRoutes>
+        ),
       },
       {
         path: "/account/edit",
-        element: <EditProfile />,
+        element: (
+          <ProtectedRoutes>
+            <EditProfile />
+          </ProtectedRoutes>
+        ),
       },
       {
         path: "/chat",
-        element: <ChatPage />,
+        element: (
+          <ProtectedRoutes>
+            <ChatPage />
+          </ProtectedRoutes>
+        ),
       },
     ],
   },

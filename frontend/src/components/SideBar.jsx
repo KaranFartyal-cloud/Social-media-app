@@ -1,5 +1,6 @@
 import { Bell, House, LogOut, Mail, Plus, Search, Send } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import SearchComp from "./Search";
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -21,6 +22,7 @@ const SideBar = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [openSearch, setOpenSearch] = useState(false);
   const dispatch = useDispatch();
   const { notification } = useSelector((store) => store.realTimeNotification);
 
@@ -56,6 +58,8 @@ const SideBar = () => {
       navigate("/");
     } else if (title == "Message") {
       navigate("/chat");
+    } else if (title == "Search") {
+      setOpenSearch(true);
     }
   };
 
@@ -138,6 +142,7 @@ const SideBar = () => {
             </div>
           ))}
         </div>
+        <SearchComp open={openSearch} setOpen={setOpenSearch} />
         <CreatePost open={open} setOpen={setOpen} />
       </div>
     </>

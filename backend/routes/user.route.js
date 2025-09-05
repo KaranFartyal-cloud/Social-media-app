@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  allUsers,
   editProfile,
   followOrUnfollow,
   getProfile,
@@ -21,5 +22,6 @@ router
   .post(isAuthenticated, upload.single("profilePicture"), editProfile); //req.file comes from multer
 router.route("/suggested").get(isAuthenticated, getSuggestUsers);
 router.route("/followorunfollow/:id").post(isAuthenticated, followOrUnfollow);
+router.route("/").get(isAuthenticated, allUsers);
 
 export default router;

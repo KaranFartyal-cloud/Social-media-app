@@ -145,6 +145,38 @@ export const getProfile = async (req, res) => {
   }
 };
 
+export const allUsers = async (req, res) => {
+  try {
+    if (!req.query.search) {
+      return res.status(200).json({
+        success: true,
+        users: [],
+      });
+    }
+    const keyword = req.query.search
+      ? {
+          $or: [
+            { username: { $regex: req.query.search, $options: "i" } },
+            // { email: { $regex: req.query.search, $options: "i" } },
+          ],
+        }
+      : {};
+
+    const users = await User.find(keyword)
+      .find({ _id: { $ne: req.id } })
+      .select("-password");
+    res.status(200).json({
+      success: true,
+      users,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 export const editProfile = async (req, res) => {
   try {
     const userId = req.id;

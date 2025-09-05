@@ -50,10 +50,10 @@ const ChatPage = () => {
     <div className="flex ml-[16%] h-screen ">
       <section className="w-full md:w-1/4 my-8">
         {" "}
-        <h1 className="font-bold mb-4 px-3 text-xl">{user.username}</h1>
+        <h1 className="font-bold mb-4 px-3 text-xl">{user?.username}</h1>
         <hr className="mb-4 border-gray-300" />
         <div className="overflow-y-auto h-[80vh]">
-          {suggestedUsers.map((suggestedUser) => {
+          {suggestedUsers?.map((suggestedUser) => {
             const isOnline = onlineUsers.includes(suggestedUser?._id);
             return (
               <div
@@ -90,7 +90,7 @@ const ChatPage = () => {
             <div className="flex gap-3 items-center mt-3 ml-2 mb-3 ">
               <Avatar>
                 <AvatarImage
-                  src={selectedUser.profilePicture}
+                  src={selectedUser?.profilePicture}
                   className="object-cover"
                 />
                 <AvatarFallback>CN</AvatarFallback>
