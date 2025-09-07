@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { setPosts, setSelectedPost } from "../redux/postSlice";
+import { setAuthUser } from "../redux/authSlice";
 
 const Post = ({ post }) => {
   const [text, setText] = useState("");
@@ -24,9 +25,10 @@ const Post = ({ post }) => {
   const { user } = useSelector((store) => store.auth);
   const { posts } = useSelector((store) => store.post);
   const dispatch = useDispatch();
-  const [liked, setLiked] = useState(post.likes.includes(user?._id) || false);
-  const [postLike, setPostLike] = useState(post.likes.length);
-  const [comments, setComments] = useState(post.comments);
+  const [liked, setLiked] = useState(post?.likes?.includes(user?._id) || false);
+  const [postLike, setPostLike] = useState(post?.likes?.length);
+  const [comments, setComments] = useState(post?.comments);
+  const [bookmark, setBookmark] = useState(user?.bookmarks?.includes(post._id));
 
   const changeEventHandler = (e) => {
     const inputText = e.target.value;
@@ -108,6 +110,36 @@ const Post = ({ post }) => {
     } catch (error) {}
   };
 
+  const bookMarkHandler = async (id) => {
+    try {
+      const res = await axios.get(`/api/v1/post/${id}/bookmark`, {
+        withCredentials: true,
+      });
+      if (res.data.success) {
+        toast.success(res.data.message);
+        if (res.data.type === "saved") {
+          const updatedUserData = {
+            ...user,
+            bookmarks: [...user.bookmarks, post._id], // immutable add
+          };
+
+          dispatch(setAuthUser(updatedUserData));
+          setBookmark(true);
+        } else {
+          const updatedUserData = {
+            ...user,
+            bookmarks: user.bookmarks.filter((item) => item !== post._id), // immutable remove
+          };
+
+          dispatch(setAuthUser(updatedUserData));
+          setBookmark(false);
+        }
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
   return (
     <div className="my-8 w-full max-w-sm mx-auto">
       <div className="flex items-center justify-between">
@@ -132,14 +164,19 @@ const Post = ({ post }) => {
             <MoreHorizontal className="cursor-pointer" />
           </DialogTrigger>
           <DialogContent className="flex flex-col items-center text-sm text-center">
+            {post?.author?._id !== user._id && (
+              <Button
+                variant="ghost"
+                className="cursor-pointer w-fit border-none text-[#ED4956] font-bold"
+              >
+                Unfollow
+              </Button>
+            )}
+
             <Button
               variant="ghost"
-              className="cursor-pointer w-fit border-none text-[#ED4956] font-bold"
+              className="cursor-pointer border-none w-fit"
             >
-              Unfollow
-            </Button>
-
-            <Button variant="ghost" className="cursor-pointer w-fit">
               Add to favourites
             </Button>
             {user && user._id === post.author._id && (
@@ -183,7 +220,25 @@ const Post = ({ post }) => {
             {/* <MessageCircle className="cursor-pointer hover:text-gray-600" /> */}
             <Send className="cursor-pointer hover:text-gray-600" />
           </div>
-          <Bookmark className="cursor-pointer hover:text-gray-600" />
+          {bookmark ? (
+            <>
+              <Bookmark
+                onClick={() => {
+                  bookMarkHandler(post._id);
+                }}
+                className="cursor-pointer fill-black hover:text-gray-600"
+              />
+            </>
+          ) : (
+            <>
+              <Bookmark
+                onClick={() => {
+                  bookMarkHandler(post._id);
+                }}
+                className="cursor-pointer hover:text-gray-600"
+              />
+            </>
+          )}
         </div>
       </div>
       <span className="font-medium block mb-2">{postLike} likes</span>

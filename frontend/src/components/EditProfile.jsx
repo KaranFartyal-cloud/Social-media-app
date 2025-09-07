@@ -22,7 +22,7 @@ const EditProfile = () => {
   const [loading, setLoading] = useState(false);
   const [bio, setBio] = useState(user?.bio);
   const [file, setFile] = useState(null);
-  const [gender, setGender] = useState(user?.gender);
+  const [gender, setGender] = useState(user?.gender || "male");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

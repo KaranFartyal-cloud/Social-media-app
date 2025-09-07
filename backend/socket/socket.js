@@ -24,7 +24,7 @@ io.on("connection", (socket) => {
   if (userId) {
     userSocketmap[userId] = socket.id;
     // console.log(userSocketmap);
-    console.log(`user connected user Id = ${userId} socketID = ${socket.id}`);
+    // console.log(`user connected user Id = ${userId} socketID = ${socket.id}`);
   }
 
   io.emit("getOnlineUsers", Object.keys(userSocketmap));

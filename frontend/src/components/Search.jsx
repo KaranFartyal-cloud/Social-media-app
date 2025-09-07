@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import useGetUserProfile from "../hooks/useGetUserProfile";
 
 const Search = ({ open, setOpen }) => {
   const [query, setQuery] = useState("");
@@ -16,6 +17,7 @@ const Search = ({ open, setOpen }) => {
   const handleNavigate = (id) => {
     setOpen(false);
     setQuery("");
+
     navigate(`/profile/${id}`);
   };
 

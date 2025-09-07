@@ -62,9 +62,16 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+        {/* <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
           LOGO
-        </h2>
+        </h2> */}
+        <div className="flex items-center justify-center">
+          <img
+            src="https://res.cloudinary.com/dsixpdfy7/image/upload/v1757101035/qzhrrira7nfu8thtlrfd.png"
+            className="h-30 w-30"
+            alt=""
+          />
+        </div>
 
         <form className="space-y-4" onSubmit={submitHandler}>
           <div>

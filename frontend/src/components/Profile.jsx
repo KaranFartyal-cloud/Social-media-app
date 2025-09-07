@@ -1,21 +1,27 @@
-import React, { act, useState } from "react";
-import { useSelector } from "react-redux";
+import React, { act, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import useGetUserProfile from "../hooks/useGetUserProfile";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AtSign, Heart, MessageCircle } from "lucide-react";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { setAuthUser, setUserProfile } from "../redux/authSlice";
 
 const Profile = () => {
   const params = useParams();
   const userId = params.id;
   useGetUserProfile(userId);
+  const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("posts");
-
   const { user, userProfile } = useSelector((store) => store.auth);
   const isLoggedInUserProfile = user?._id === userProfile?._id;
-  const isFollowing = user?.following.includes(userProfile?._id);
+  const [isFollowing, setIsFollowing] = useState(
+    userProfile.follower.includes(user._id)
+  );
+  const dispatch = useDispatch();
 
   // console.log(userProfile);
 
@@ -23,10 +29,63 @@ const Profile = () => {
     setActiveTab(tab);
   };
 
+  useEffect(() => {
+    if (userProfile && user) {
+      setIsFollowing(userProfile.follower.includes(user._id));
+    }
+  }, [userProfile, user]);
+
   const displayedPost =
     activeTab === "posts" ? userProfile?.posts : userProfile?.bookmarks;
 
   // console.log(displayedPost);
+
+  const followUnfollowHandler = async () => {
+    if (user._id === userProfile._id) {
+      return;
+    }
+    try {
+      setLoading(true);
+      const res = await axios.get(
+        `/api/v1/user/followorunfollow/${userProfile?._id}`,
+        { withCredentials: true }
+      );
+
+      if (res.data.type === "follow") {
+        const updatedUserData = {
+          ...user,
+          following: [...user?.following, userProfile._id],
+        };
+
+        const updatedProfileData = {
+          ...userProfile,
+          follower: [...userProfile?.follower, user._id],
+        };
+        dispatch(setUserProfile(updatedProfileData));
+        dispatch(setAuthUser(updatedUserData));
+        setIsFollowing(true);
+        // toast.success("followed");
+      } else if (res.data.type === "unfollow") {
+        const updatedUserData = {
+          ...user,
+          following: user?.following.filter((id) => id !== userProfile._id),
+        };
+
+        const updatedProfileData = {
+          ...userProfile,
+          follower: userProfile?.follower.filter((id) => id !== user._id),
+        };
+        dispatch(setUserProfile(updatedProfileData));
+        dispatch(setAuthUser(updatedUserData));
+        setIsFollowing(false);
+        // toast.success("unfollowed");
+      }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex max-w-4xl justify-center mx-auto pl-10">
@@ -76,6 +135,7 @@ const Profile = () => {
                         <Button
                           variant="secondary"
                           className="hover:bg-gray-200 h-8"
+                          onClick={followUnfollowHandler}
                         >
                           Unfollow
                         </Button>
@@ -89,7 +149,10 @@ const Profile = () => {
                       </>
                     ) : (
                       <>
-                        <Button className="bg-[#0095F6] hover:bg-[#0075c4] h-8">
+                        <Button
+                          className="bg-[#0095F6] hover:bg-[#0075c4] h-8"
+                          onClick={followUnfollowHandler}
+                        >
                           Follow
                         </Button>
                       </>

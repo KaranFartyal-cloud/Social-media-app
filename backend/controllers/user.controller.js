@@ -93,6 +93,7 @@ export const login = async (req, res) => {
       followers: user.follower,
       following: user.following,
       posts: populatedPost,
+      bookmarks: user.bookmarks,
     };
 
     return res
@@ -286,6 +287,7 @@ export const followOrUnfollow = async (req, res) => {
       ]);
 
       return res.status(200).json({
+        type: "unfollow",
         message: "unfollowed successfully",
         success: true,
       });
@@ -305,6 +307,7 @@ export const followOrUnfollow = async (req, res) => {
       ]);
 
       return res.status(200).json({
+        type: "follow",
         message: "Followed successfully",
         success: true,
       });

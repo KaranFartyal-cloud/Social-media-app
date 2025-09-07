@@ -19,6 +19,7 @@ const ChatPage = () => {
   const dispatch = useDispatch();
 
   const sendMessageHandler = async () => {
+    if (!textMessage.trim()) return;
     try {
       const res = await axios.post(
         `/api/v1/message/send/${selectedUser?._id}`,
@@ -40,6 +41,13 @@ const ChatPage = () => {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault(); // Prevent default behavior (like new line)
+      sendMessageHandler();
+    }
+  };
+
   useEffect(() => {
     return () => {
       dispatch(setSelectedUser(null));
@@ -57,6 +65,7 @@ const ChatPage = () => {
             const isOnline = onlineUsers.includes(suggestedUser?._id);
             return (
               <div
+                key={suggestedUser._id}
                 onClick={() => dispatch(setSelectedUser(suggestedUser))}
                 className="flex gap-3 items-center p-3 hover:bg-gray-100 cursor-pointer"
               >
@@ -108,6 +117,7 @@ const ChatPage = () => {
                 type="text"
                 value={textMessage}
                 onChange={(e) => setTextMessage(e.target.value)}
+                onKeyDown={handleKeyDown}
               />
               <Button onClick={sendMessageHandler}>Send</Button>
             </div>

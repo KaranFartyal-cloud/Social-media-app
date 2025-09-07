@@ -74,6 +74,7 @@ const SideBar = () => {
       dispatch(setAuthUser(null));
       dispatch(setPosts([]));
       dispatch(setSelectedPost(null));
+      dispatch(setNotification([]));
       navigate("/login");
     } catch (error) {
       //toast
@@ -85,7 +86,13 @@ const SideBar = () => {
     <>
       <div className="left-0 top-0 px-4 fixed z-10 h-screen border-r border-gray-500 w-[16%]">
         <div className="flex flex-col ">
-          <h1 className="mt-8 pl-3 font-bold text-xl">LOGO</h1>
+          {/* <h1 className="mt-8 pl-3 font-bold text-xl">LOGO</h1>
+           */}
+          <img
+            src="https://res.cloudinary.com/dsixpdfy7/image/upload/v1757101035/qzhrrira7nfu8thtlrfd.png"
+            className="h-30 w-30"
+            alt="logo"
+          />
 
           {sideBarItems.map((item, index) => (
             <div

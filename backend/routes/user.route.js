@@ -21,7 +21,7 @@ router
   .route("/profile/edit")
   .post(isAuthenticated, upload.single("profilePicture"), editProfile); //req.file comes from multer
 router.route("/suggested").get(isAuthenticated, getSuggestUsers);
-router.route("/followorunfollow/:id").post(isAuthenticated, followOrUnfollow);
+router.route("/followorunfollow/:id").get(isAuthenticated, followOrUnfollow);
 router.route("/").get(isAuthenticated, allUsers);
 
 export default router;
