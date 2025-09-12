@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(urlencoded({ extended: true }));
 const corsOptions = {
-  origin: "http://localhost:5173",
+  origin: "https://social-media-app-1-33ak.onrender.com",
   credentials: true,
 };
 
