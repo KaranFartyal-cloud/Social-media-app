@@ -66,7 +66,9 @@ const SideBar = () => {
   const logOutHandler = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get("/api/v1/user/logout");
+      const { data } = await axios.get(
+        "https://social-media-app-bbfr.onrender.com/api/v1/user/logout"
+      );
       if ((data.success = true)) {
         //toast
       }
