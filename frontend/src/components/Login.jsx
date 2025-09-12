@@ -28,7 +28,7 @@ const Login = () => {
       };
 
       const { data } = await axios.post(
-        "/api/v1/user/login",
+        "https://social-media-app-bbfr.onrender.com/api/v1/user/login",
         {
           email,
           password,

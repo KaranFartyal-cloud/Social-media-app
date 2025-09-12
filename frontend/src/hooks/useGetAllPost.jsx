@@ -8,7 +8,7 @@ const useGetAllPost = () => {
   useEffect(() => {
     const fetchAllPost = async () => {
       try {
-        const res = await axios.get("/api/v1/post/all", {
+        const res = await axios.get("https://social-media-app-bbfr.onrender.com/api/v1/post/all", {
           withCredentials: true,
         });
         dispatch(setPosts(res.data.posts));

@@ -14,7 +14,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:3000", // your backend
+        target: "https://social-media-app-bbfr.onrender.com", // your backend
         changeOrigin: true,
         secure: false,
       },

@@ -9,7 +9,7 @@ const useGetAllMessages = () => {
   useEffect(() => {
     const fetchAllMessages = async () => {
       try {
-        const res = await axios.get(`/api/v1/message/all/${selectedUser._id}`, {
+        const res = await axios.get(`https://social-media-app-bbfr.onrender.com/api/v1/message/all/${selectedUser._id}`, {
           withCredentials: true,
         });
         dispatch(setMessages(res.data.message));

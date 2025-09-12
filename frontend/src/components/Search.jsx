@@ -28,7 +28,7 @@ const Search = ({ open, setOpen }) => {
       const val = e.target.value.trim();
       //   console.log(val);
 
-      const res = await axios.get(`/api/v1/user?search=${val}`, {
+      const res = await axios.get(`https://social-media-app-bbfr.onrender.com/api/v1/user?search=${val}`, {
         withCredentials: true,
       });
 

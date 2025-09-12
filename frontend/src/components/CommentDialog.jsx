@@ -39,7 +39,7 @@ const CommentDialog = ({ open, setOpen }) => {
   const sendMessageHandler = async () => {
     try {
       const res = await axios.post(
-        `/api/v1/post/${selectedPost._id}/comment`,
+        `https://social-media-app-bbfr.onrender.com/api/v1/post/${selectedPost._id}/comment`,
         { text },
         {
           headers: {

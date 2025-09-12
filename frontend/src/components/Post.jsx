@@ -41,7 +41,7 @@ const Post = ({ post }) => {
 
   const deletePostHandler = async () => {
     try {
-      const res = await axios.delete(`/api/v1/post/delete/${post._id}`, {
+      const res = await axios.delete(`https://social-media-app-bbfr.onrender.com/api/v1/post/delete/${post._id}`, {
         withCredentials: true,
       });
       // console.log(res.data);
@@ -56,7 +56,7 @@ const Post = ({ post }) => {
   const likeOrDislikeHandler = async () => {
     try {
       const action = liked ? "dislike" : "like";
-      const res = await axios.get(`/api/v1/post/${post._id}/${action}`, {
+      const res = await axios.get(`https://social-media-app-bbfr.onrender.com/api/v1/post/${post._id}/${action}`, {
         withCredentials: true,
       });
 
@@ -86,7 +86,7 @@ const Post = ({ post }) => {
   const commentHandler = async () => {
     try {
       const res = await axios.post(
-        `/api/v1/post/${post._id}/comment`,
+        `https://social-media-app-bbfr.onrender.com/api/v1/post/${post._id}/comment`,
         { text },
         {
           headers: {
@@ -112,7 +112,7 @@ const Post = ({ post }) => {
 
   const bookMarkHandler = async (id) => {
     try {
-      const res = await axios.get(`/api/v1/post/${id}/bookmark`, {
+      const res = await axios.get(`https://social-media-app-bbfr.onrender.com/api/v1/post/${id}/bookmark`, {
         withCredentials: true,
       });
       if (res.data.success) {

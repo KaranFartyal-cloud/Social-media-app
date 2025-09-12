@@ -47,7 +47,7 @@ const Profile = () => {
     try {
       setLoading(true);
       const res = await axios.get(
-        `/api/v1/user/followorunfollow/${userProfile?._id}`,
+        `https://social-media-app-bbfr.onrender.com/api/v1/user/followorunfollow/${userProfile?._id}`,
         { withCredentials: true }
       );
 

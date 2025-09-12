@@ -8,7 +8,7 @@ const useGetUserProfile = (userId) => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const res = await axios.get(`/api/v1/user/${userId}/profile`, {
+        const res = await axios.get(`https://social-media-app-bbfr.onrender.com/api/v1/user/${userId}/profile`, {
           withCredentials: true,
         });
         dispatch(setUserProfile(res.data.user));
