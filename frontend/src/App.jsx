@@ -4,7 +4,7 @@ import Login from "./components/Login";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import MainLayout from "./components/mainLayout";
+import MainLayout from "./components/MainLayout";
 import Home from "./components/Home";
 import NotFound from "./components/NotFound";
 import Profile from "./components/Profile";
