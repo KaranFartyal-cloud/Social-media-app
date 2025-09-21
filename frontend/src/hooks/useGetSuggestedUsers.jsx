@@ -8,7 +8,7 @@ const useGetSuggestedUsers = () => {
   useEffect(() => {
     const fetchSuggestedUser = async () => {
       try {
-        const res = await axios.get("https://backend-wrbx.onrender.com/api/v1/user/suggested", {
+        const res = await axios.get("http://localhost:3000/api/v1/user/suggested", {
           withCredentials: true,
         });
         dispatch(setSuggestedUsers(res.data.users));

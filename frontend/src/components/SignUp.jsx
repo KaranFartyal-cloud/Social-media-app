@@ -27,7 +27,7 @@ const SignUp = () => {
       };
 
       const { data } = await axios.post(
-        "https://backend-wrbx.onrender.com/api/v1/user/register",
+        "http://localhost:3000/api/v1/user/register",
         {
           username,
           email,

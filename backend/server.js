@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(urlencoded({ extended: true }));
 const corsOptions = {
-  origin: "https://frontend-bz9s.onrender.com",
+  origin: "http://localhost:5173",
   credentials: true,
 };
 
