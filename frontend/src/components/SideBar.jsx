@@ -67,7 +67,7 @@ const SideBar = () => {
     try {
       setLoading(true);
       const { data } = await axios.get(
-        "http://localhost:3000/api/v1/user/logout"
+        "https://backend-wrbx.onrender.com/api/v1/user/logout"
       );
       if ((data.success = true)) {
         //toast

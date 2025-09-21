@@ -47,7 +47,7 @@ const Profile = () => {
     try {
       setLoading(true);
       const res = await axios.get(
-        `http://localhost:3000/api/v1/user/followorunfollow/${userProfile?._id}`,
+        `https://backend-wrbx.onrender.com/api/v1/user/followorunfollow/${userProfile?._id}`,
         { withCredentials: true }
       );
 
