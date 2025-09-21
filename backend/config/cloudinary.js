@@ -10,3 +10,5 @@ cloudinary.config({
 });
 
 export default cloudinary;
+
+console.log(process.env.CLOUDINARY_API_KEY, process.env.CLOUD_NAME);

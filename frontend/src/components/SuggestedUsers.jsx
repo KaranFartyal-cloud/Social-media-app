@@ -26,7 +26,7 @@ const SuggestedUsers = () => {
                     src={user?.profilePicture}
                     className="object-cover "
                   />
-                  <AvatarFallback>CN</AvatarFallback>
+                  
                 </Avatar>
               </Link>
 

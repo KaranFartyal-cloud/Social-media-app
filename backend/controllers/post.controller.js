@@ -10,6 +10,7 @@ export const addNewPost = async (req, res) => {
     const caption = req.body.caption?.trim();
 
     const image = req.file;
+    console.log(req.file);
 
     const authorId = req.id;
 

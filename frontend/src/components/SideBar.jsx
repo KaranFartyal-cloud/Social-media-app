@@ -67,7 +67,7 @@ const SideBar = () => {
     try {
       setLoading(true);
       const { data } = await axios.get(
-        "https://social-media-app-bbfr.onrender.com/api/v1/user/logout"
+        "http://localhost:3000/api/v1/user/logout"
       );
       if ((data.success = true)) {
         //toast

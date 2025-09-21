@@ -9,7 +9,9 @@ import postRoutes from "./routes/post.route.js";
 import { app, server } from "./socket/socket.js";
 import path from "path";
 
-dotenv.config();
+dotenv.config({
+  path: "./.env",
+});
 connectDB();
 const port = process.env.PORT || 3000;
 
@@ -17,7 +19,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(urlencoded({ extended: true }));
 const corsOptions = {
-  origin: "https://social-media-app-1-33ak.onrender.com",
+  origin: "http://localhost:5173",
   credentials: true,
 };
 

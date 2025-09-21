@@ -22,7 +22,7 @@ const ChatPage = () => {
     if (!textMessage.trim()) return;
     try {
       const res = await axios.post(
-        `https://social-media-app-bbfr.onrender.com/api/v1/message/send/${selectedUser?._id}`,
+        `http://localhost:3000/api/v1/message/send/${selectedUser?._id}`,
         { message: textMessage },
         {
           headers: {

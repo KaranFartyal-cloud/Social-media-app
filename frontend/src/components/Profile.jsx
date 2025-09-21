@@ -19,7 +19,7 @@ const Profile = () => {
   const { user, userProfile } = useSelector((store) => store.auth);
   const isLoggedInUserProfile = user?._id === userProfile?._id;
   const [isFollowing, setIsFollowing] = useState(
-    userProfile.follower.includes(user._id)
+    userProfile?.follower.includes(user._id)
   );
   const dispatch = useDispatch();
 
@@ -31,7 +31,7 @@ const Profile = () => {
 
   useEffect(() => {
     if (userProfile && user) {
-      setIsFollowing(userProfile.follower.includes(user._id));
+      setIsFollowing(userProfile?.follower?.includes(user._id));
     }
   }, [userProfile, user]);
 
@@ -47,7 +47,7 @@ const Profile = () => {
     try {
       setLoading(true);
       const res = await axios.get(
-        `https://social-media-app-bbfr.onrender.com/api/v1/user/followorunfollow/${userProfile?._id}`,
+        `http://localhost:3000/api/v1/user/followorunfollow/${userProfile?._id}`,
         { withCredentials: true }
       );
 
@@ -68,12 +68,12 @@ const Profile = () => {
       } else if (res.data.type === "unfollow") {
         const updatedUserData = {
           ...user,
-          following: user?.following.filter((id) => id !== userProfile._id),
+          following: user?.following?.filter((id) => id !== userProfile?._id),
         };
 
         const updatedProfileData = {
           ...userProfile,
-          follower: userProfile?.follower.filter((id) => id !== user._id),
+          follower: userProfile?.follower?.filter((id) => id !== user?._id),
         };
         dispatch(setUserProfile(updatedProfileData));
         dispatch(setAuthUser(updatedUserData));
@@ -163,19 +163,19 @@ const Profile = () => {
               <div className="flex items-center gap-4">
                 <p>
                   <span className="font-semibold">
-                    {userProfile?.posts.length}
+                    {userProfile?.posts?.length}
                   </span>{" "}
                   <span>posts</span>
                 </p>
                 <p>
                   <span className="font-semibold">
-                    {userProfile?.follower.length}
+                    {userProfile?.follower?.length}
                   </span>{" "}
                   <span>followers</span>
                 </p>
                 <p>
                   <span className="font-semibold">
-                    {userProfile?.following.length}
+                    {userProfile?.following?.length}
                   </span>{" "}
                   <span>following</span>
                 </p>

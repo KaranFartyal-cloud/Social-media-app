@@ -41,9 +41,12 @@ const Post = ({ post }) => {
 
   const deletePostHandler = async () => {
     try {
-      const res = await axios.delete(`https://social-media-app-bbfr.onrender.com/api/v1/post/delete/${post._id}`, {
-        withCredentials: true,
-      });
+      const res = await axios.delete(
+        `http://localhost:3000/api/v1/post/delete/${post._id}`,
+        {
+          withCredentials: true,
+        }
+      );
       // console.log(res.data);
       const updatedPostData = posts.filter((item) => item._id !== post._id);
       dispatch(setPosts(updatedPostData));
@@ -56,9 +59,12 @@ const Post = ({ post }) => {
   const likeOrDislikeHandler = async () => {
     try {
       const action = liked ? "dislike" : "like";
-      const res = await axios.get(`https://social-media-app-bbfr.onrender.com/api/v1/post/${post._id}/${action}`, {
-        withCredentials: true,
-      });
+      const res = await axios.get(
+        `http://localhost:3000/api/v1/post/${post._id}/${action}`,
+        {
+          withCredentials: true,
+        }
+      );
 
       if (res.data.success) {
         const upDatedLikes = liked ? postLike - 1 : postLike + 1;
@@ -86,7 +92,7 @@ const Post = ({ post }) => {
   const commentHandler = async () => {
     try {
       const res = await axios.post(
-        `https://social-media-app-bbfr.onrender.com/api/v1/post/${post._id}/comment`,
+        `http://localhost:3000/api/v1/post/${post._id}/comment`,
         { text },
         {
           headers: {
@@ -112,9 +118,12 @@ const Post = ({ post }) => {
 
   const bookMarkHandler = async (id) => {
     try {
-      const res = await axios.get(`https://social-media-app-bbfr.onrender.com/api/v1/post/${id}/bookmark`, {
-        withCredentials: true,
-      });
+      const res = await axios.get(
+        `http://localhost:3000/api/v1/post/${id}/bookmark`,
+        {
+          withCredentials: true,
+        }
+      );
       if (res.data.success) {
         toast.success(res.data.message);
         if (res.data.type === "saved") {

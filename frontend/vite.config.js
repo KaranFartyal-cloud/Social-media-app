@@ -11,13 +11,4 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  server: {
-    proxy: {
-      "/api": {
-        target: "https://social-media-app-bbfr.onrender.com", // your backend
-        changeOrigin: true,
-        secure: false,
-      },
-    },
-  },
 });

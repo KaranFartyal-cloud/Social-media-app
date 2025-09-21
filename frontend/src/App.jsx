@@ -82,7 +82,7 @@ function App() {
   const { user } = useSelector((store) => store.auth);
   useEffect(() => {
     if (user) {
-      const socketio = io("https://social-media-app-bbfr.onrender.com", {
+      const socketio = io("http://localhost:3000", {
         query: {
           userId: user._id,
         },
