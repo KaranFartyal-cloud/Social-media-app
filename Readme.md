@@ -21,39 +21,32 @@ Clone this project by either downloading the ZIP file or cloning it using the re
 
 cd Social-media-app
 
-text
-
 ### Run the backend
 
 cd backend
 npm run dev
 
-text
 
 If you encounter the error `sh: 1: nodemon: not found`, run:
 
 npm install --save-dev nodemon
 npm run dev
 
-text
 
 ### Run the frontend
 
 cd frontend
 
-text
 
 If you encounter the error `vite: not found`, run:
 
 npm install vite --save-dev
 
-text
 
 Then start the frontend server:
 
 npm run dev
 
-text
 
 The app will be running at: [http://localhost:5173](http://localhost:5173)
 
