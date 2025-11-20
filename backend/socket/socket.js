@@ -1,33 +1,16 @@
 import { Server } from "socket.io";
 import express from "express";
 import http from "http";
-import cors from "cors";
 
 const app = express();
 const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.FRONTEND_URL || "http://localhost:5173",
-    methods: ["GET", "POST"],
+    origin: ["http://localhost:5173", process.env.FRONTEND_URL],
+    credentials: true,
   },
 });
-
-const allowedOrigins = [process.env.FRONTEND_URL, "http://localhost:5173"];
-
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      } else {
-        return callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-  })
-);
 
 const userSocketmap = {};
 
