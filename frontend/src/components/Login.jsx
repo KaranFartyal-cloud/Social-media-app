@@ -7,15 +7,24 @@ import { Loader2 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { setAuthUser } from "../redux/authSlice";
 import { useBackendUrl } from "../context/backendContext";
+import { motion, AnimatePresence } from "framer-motion";
+
+const slideshowImages = [
+  "https://images.unsplash.com/photo-1543807535-eceef0bc6599?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://plus.unsplash.com/premium_photo-1661715817028-818d78a4e8e5?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.unsplash.com/photo-1530047139082-5435ca3c4614?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://plus.unsplash.com/premium_photo-1664874602639-977e8c682917?q=80&w=765&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+];
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [current, setCurrent] = useState(0);
+
   const dispatch = useDispatch();
   const { user } = useSelector((store) => store.auth);
   const backendURL = useBackendUrl();
-
   const navigate = useNavigate();
 
   const submitHandler = async (e) => {
@@ -24,30 +33,21 @@ const Login = () => {
       setLoading(true);
 
       const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         withCredentials: true,
       };
 
       const { data } = await axios.post(
         `${backendURL}/api/v1/user/login`,
-        {
-          email,
-          password,
-        },
+        { email, password },
         config
       );
 
-      // console.log(data);
       dispatch(setAuthUser(data.user));
-
       toast.success(`${data.user.username} is logged in`);
-
       navigate("/");
     } catch (error) {
       toast.error(error.response?.data?.message || "Login failed");
-
       console.error(error.response?.data || error.message);
     } finally {
       setEmail("");
@@ -57,75 +57,95 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (user) {
-      navigate("/");
-    }
+    if (user) navigate("/");
+  }, []);
+
+  // Auto slideshow
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % slideshowImages.length);
+    }, 3500);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
-        {/* <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-          LOGO
-        </h2> */}
-        <div className="flex items-center justify-center">
-          <img
-            src="https://res.cloudinary.com/dsixpdfy7/image/upload/v1757101035/qzhrrira7nfu8thtlrfd.png"
-            className="h-30 w-30"
-            alt=""
-          />
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="flex w-full bg-white rounded-2xl shadow-xl overflow-hidden h-screen">
+        {/* Left Slideshow */}
+        <div className="hidden md:flex w-[40%] h-full relative bg-black">
+          <AnimatePresence>
+            <motion.img
+              key={slideshowImages[current]}
+              src={slideshowImages[current]}
+              initial={{ opacity: 0, scale: 1.05 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 1 }}
+              transition={{
+                duration: 1.4,
+                ease: "easeInOut",
+              }}
+              className="absolute inset-0 w-full h-full object-cover rounded-l-2xl"
+            />
+          </AnimatePresence>
         </div>
 
-        <form className="space-y-4" onSubmit={submitHandler}>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email
-            </label>
-            <input
-              type="email"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg outline-none transition-all"
-              placeholder="your@email.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+        {/* Right Form */}
+        <div className="w-full md:w-[60%] p-10 flex flex-col  justify-center">
+          <div className="flex items-center justify-center mb-6">
+            <img
+              src="https://res.cloudinary.com/dsixpdfy7/image/upload/v1757101035/qzhrrira7nfu8thtlrfd.png"
+              className="h-20 w-20 object-contain"
+              alt="Logo"
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Password
-            </label>
-            <input
-              type="password"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg  outline-none transition-all"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
+          <form className="space-y-4" onSubmit={submitHandler}>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Email
+              </label>
+              <input
+                type="email"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                placeholder="your@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
 
-          {loading ? (
-            <>
-              <Button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg transition-colors">
-                <Loader2 />
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Password
+              </label>
+              <input
+                type="password"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+
+            {loading ? (
+              <Button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg">
+                <Loader2 className="animate-spin" />
               </Button>
-            </>
-          ) : (
-            <>
+            ) : (
               <Button
                 type="submit"
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg transition-colors"
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg"
               >
                 Login
               </Button>
-            </>
-          )}
-        </form>
+            )}
+          </form>
 
-        <div className="mt-6 text-center text-sm text-gray-600">
-          <span className="mx-2">Don't have an account</span>
-          <span className="text-blue-700">
-            {" "}
-            <Link to={"/signUp"}>SignUp</Link>
-          </span>
+          <div className="mt-6 text-center text-sm text-gray-600">
+            <span className="mx-2">Don't have an account?</span>
+            <Link to={"/signUp"} className="text-blue-700 font-medium">
+              Sign Up
+            </Link>
+          </div>
         </div>
       </div>
     </div>

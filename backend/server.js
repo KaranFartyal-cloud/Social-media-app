@@ -6,8 +6,7 @@ import http from "http";
 import connectDB from "./config/db.js";
 import userRoutes from "./routes/user.route.js";
 import messageRoutes from "./routes/message.route.js";
-import postRoutes from "./routes/post.route.js";
-
+import postRoutes from "./routes/post.route.js";  
 import { initSocket } from "./socket/socket.js";
 
 dotenv.config();
