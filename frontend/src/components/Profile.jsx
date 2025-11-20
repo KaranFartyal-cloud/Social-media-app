@@ -9,6 +9,7 @@ import { AtSign, Heart, MessageCircle } from "lucide-react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { setAuthUser, setUserProfile } from "../redux/authSlice";
+import { useBackendUrl } from "../context/backendContext";
 
 const Profile = () => {
   const params = useParams();
@@ -22,6 +23,7 @@ const Profile = () => {
     userProfile?.follower.includes(user._id)
   );
   const dispatch = useDispatch();
+  const backendURL = useBackendUrl();
 
   // console.log(userProfile);
 
@@ -47,7 +49,7 @@ const Profile = () => {
     try {
       setLoading(true);
       const res = await axios.get(
-        `http://localhost:3000/api/v1/user/followorunfollow/${userProfile?._id}`,
+        `${backendURL}/api/v1/user/followorunfollow/${userProfile?._id}`,
         { withCredentials: true }
       );
 

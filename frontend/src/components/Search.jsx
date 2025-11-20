@@ -7,12 +7,14 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import useGetUserProfile from "../hooks/useGetUserProfile";
+import { useBackendUrl } from "../context/backendContext";
 
 const Search = ({ open, setOpen }) => {
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
   const navigate = useNavigate();
+  const backendURL = useBackendUrl();
 
   const handleNavigate = (id) => {
     setOpen(false);
@@ -28,7 +30,7 @@ const Search = ({ open, setOpen }) => {
       const val = e.target.value.trim();
       //   console.log(val);
 
-      const res = await axios.get(`http://localhost:3000/api/v1/user?search=${val}`, {
+      const res = await axios.get(`${backendURL}/api/v1/user?search=${val}`, {
         withCredentials: true,
       });
 

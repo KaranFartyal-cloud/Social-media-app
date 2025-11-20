@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { setAuthUser } from "../redux/authSlice";
 import { useNavigate } from "react-router-dom";
+import { useBackendUrl } from "../context/backendContext";
 
 const EditProfile = () => {
   const imgRef = useRef();
@@ -25,6 +26,7 @@ const EditProfile = () => {
   const [gender, setGender] = useState(user?.gender || "male");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const backendURL = useBackendUrl();
 
   const selectChangeHandler = (e) => {
     const selFile = e.target.files[0];
@@ -39,13 +41,17 @@ const EditProfile = () => {
 
     try {
       setLoading(true);
-      const res = await axios.post("http://localhost:3000/api/v1/user/profile/edit", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+      const res = await axios.post(
+        `${backendURL}/api/v1/user/profile/edit`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
 
-        withCredentials: true,
-      });
+          withCredentials: true,
+        }
+      );
       setLoading(false);
 
       if (res.data.success) {

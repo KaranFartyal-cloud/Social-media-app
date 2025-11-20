@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { setNotification } from "../redux/rtnslice";
+import { useBackendUrl } from "../context/backendContext";
 
 const SideBar = () => {
   const { user } = useSelector((store) => store.auth);
@@ -25,6 +26,7 @@ const SideBar = () => {
   const [openSearch, setOpenSearch] = useState(false);
   const dispatch = useDispatch();
   const { notification } = useSelector((store) => store.realTimeNotification);
+  const backendURL = useBackendUrl();
 
   const sideBarItems = [
     { icon: <House />, title: "Home" },
@@ -66,9 +68,7 @@ const SideBar = () => {
   const logOutHandler = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get(
-        "http://localhost:3000/api/v1/user/logout"
-      );
+      const { data } = await axios.get(`${backendURL}/api/v1/user/logout`);
       if ((data.success = true)) {
         //toast
       }
@@ -86,7 +86,7 @@ const SideBar = () => {
   };
   return (
     <>
-      <div className="left-0 top-0 px-4 fixed z-10 h-screen border-r border-gray-500 w-[16%]">
+      <div className=" max-lg:hidden left-0 top-0 px-4 fixed z-10 h-screen border-r border-gray-500 w-[16%]">
         <div className="flex flex-col ">
           {/* <h1 className="mt-8 pl-3 font-bold text-xl">LOGO</h1>
            */}

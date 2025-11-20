@@ -8,11 +8,14 @@ import { Input } from "@/components/ui/input";
 import Messages from "./Messages";
 import axios from "axios";
 import { setMessages } from "../redux/chatSlice";
+import { useBackendUrl } from "../context/backendContext";
 
 const ChatPage = () => {
   const { user, suggestedUsers, selectedUser } = useSelector(
     (store) => store.auth
   );
+  const backendURL = useBackendUrl();
+
   const [textMessage, setTextMessage] = useState("");
   const { onlineUsers, messages } = useSelector((store) => store.chat);
 
@@ -22,7 +25,7 @@ const ChatPage = () => {
     if (!textMessage.trim()) return;
     try {
       const res = await axios.post(
-        `http://localhost:3000/api/v1/message/send/${selectedUser?._id}`,
+        `${backendURL}/api/v1/message/send/${selectedUser?._id}`,
         { message: textMessage },
         {
           headers: {

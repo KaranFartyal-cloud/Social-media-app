@@ -2,13 +2,15 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setSuggestedUsers } from "../redux/authSlice";
+import { useBackendUrl } from "../context/backendContext";
 
 const useGetSuggestedUsers = () => {
   const dispatch = useDispatch();
+  const backendUrl = useBackendUrl();
   useEffect(() => {
     const fetchSuggestedUser = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/v1/user/suggested", {
+        const res = await axios.get(`${backendUrl}/api/v1/user/suggested`, {
           withCredentials: true,
         });
         dispatch(setSuggestedUsers(res.data.users));

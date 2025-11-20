@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "../redux/postSlice";
+import { useBackendUrl } from "../context/backendContext";
 
 const CreatePost = ({ open, setOpen }) => {
   const imageRef = useRef();
@@ -26,6 +27,7 @@ const CreatePost = ({ open, setOpen }) => {
   const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
   const { posts } = useSelector((store) => store.post);
+  const backendURL = useBackendUrl();
 
   const fileChangeHandler = async (e) => {
     const file = e.target.files?.[0];
@@ -42,12 +44,16 @@ const CreatePost = ({ open, setOpen }) => {
     if (imagePreview) formData.append("image", file);
     try {
       setLoading(true);
-      const res = await axios.post("http://localhost:3000/api/v1/post/addpost", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        withCredentials: true,
-      });
+      const res = await axios.post(
+        `${backendURL}/api/v1/post/addpost`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        }
+      );
       if (res.data.success) {
         toast.success("New post created");
         dispatch(setPosts([res.data.post, ...posts]));

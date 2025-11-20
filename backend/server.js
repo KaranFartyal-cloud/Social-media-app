@@ -12,18 +12,30 @@ import path from "path";
 dotenv.config({
   path: "./.env",
 });
+
+const allowedOrigins = [process.env.FRONTEND_URL, "http://localhost:5173"];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
+
 connectDB();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(urlencoded({ extended: true }));
-const corsOptions = {
-  origin: "http://localhost:5173",
-  credentials: true,
-};
-
-app.use(cors(corsOptions));
 
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/post", postRoutes);

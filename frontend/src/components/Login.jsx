@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { setAuthUser } from "../redux/authSlice";
+import { useBackendUrl } from "../context/backendContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -13,6 +14,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const { user } = useSelector((store) => store.auth);
+  const backendURL = useBackendUrl();
 
   const navigate = useNavigate();
 
@@ -29,7 +31,7 @@ const Login = () => {
       };
 
       const { data } = await axios.post(
-        "http://localhost:3000/api/v1/user/login",
+        `${backendURL}/api/v1/user/login`,
         {
           email,
           password,

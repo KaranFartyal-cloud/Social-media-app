@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSelector } from "react-redux";
+import { useBackendUrl } from "../context/backendContext";
 
 const SignUp = () => {
   const [username, setUsername] = useState("");
@@ -12,6 +13,7 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const { user } = useSelector((store) => store.auth);
+  const backendURL = useBackendUrl();
 
   const navigate = useNavigate();
 
@@ -27,7 +29,7 @@ const SignUp = () => {
       };
 
       const { data } = await axios.post(
-        "http://localhost:3000/api/v1/user/register",
+        `${backendURL}/api/v1/user/register`,
         {
           username,
           email,

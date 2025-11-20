@@ -18,6 +18,8 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { setPosts, setSelectedPost } from "../redux/postSlice";
 import { setAuthUser } from "../redux/authSlice";
+import { useBackendUrl } from "../context/backendContext";
+import { Link, useNavigate } from "react-router-dom";
 
 const Post = ({ post }) => {
   const [text, setText] = useState("");
@@ -29,6 +31,8 @@ const Post = ({ post }) => {
   const [postLike, setPostLike] = useState(post?.likes?.length);
   const [comments, setComments] = useState(post?.comments);
   const [bookmark, setBookmark] = useState(user?.bookmarks?.includes(post._id));
+  const backendURL = useBackendUrl();
+  const navigate = useNavigate();
 
   const changeEventHandler = (e) => {
     const inputText = e.target.value;
@@ -42,7 +46,7 @@ const Post = ({ post }) => {
   const deletePostHandler = async () => {
     try {
       const res = await axios.delete(
-        `http://localhost:3000/api/v1/post/delete/${post._id}`,
+        `${backendURL}/api/v1/post/delete/${post._id}`,
         {
           withCredentials: true,
         }
@@ -60,7 +64,7 @@ const Post = ({ post }) => {
     try {
       const action = liked ? "dislike" : "like";
       const res = await axios.get(
-        `http://localhost:3000/api/v1/post/${post._id}/${action}`,
+        `${backendURL}/api/v1/post/${post._id}/${action}`,
         {
           withCredentials: true,
         }
@@ -92,7 +96,7 @@ const Post = ({ post }) => {
   const commentHandler = async () => {
     try {
       const res = await axios.post(
-        `http://localhost:3000/api/v1/post/${post._id}/comment`,
+        `${backendURL}/api/v1/post/${post._id}/comment`,
         { text },
         {
           headers: {
@@ -118,12 +122,9 @@ const Post = ({ post }) => {
 
   const bookMarkHandler = async (id) => {
     try {
-      const res = await axios.get(
-        `http://localhost:3000/api/v1/post/${id}/bookmark`,
-        {
-          withCredentials: true,
-        }
-      );
+      const res = await axios.get(`${backendURL}/api/v1/post/${id}/bookmark`, {
+        withCredentials: true,
+      });
       if (res.data.success) {
         toast.success(res.data.message);
         if (res.data.type === "saved") {
@@ -150,7 +151,7 @@ const Post = ({ post }) => {
   };
 
   return (
-    <div className="my-8 w-full max-w-sm mx-auto">
+    <div className="my-8 w-full max-w-sm mx-auto max-lg:p-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Avatar>
@@ -162,7 +163,9 @@ const Post = ({ post }) => {
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <div className="flex gap-2 items-center">
-            <h1 className="font-semibold">{post.author.username}</h1>
+            <Link to={`/profile/${post.author._id}`}>
+              <h1 className="font-semibold">{post.author.username}</h1>
+            </Link>
             {post.author._id === user._id && (
               <Badge variant="secondary">Author</Badge>
             )}

@@ -82,12 +82,15 @@ function App() {
   const { user } = useSelector((store) => store.auth);
   useEffect(() => {
     if (user) {
-      const socketio = io("https://backend-wrbx.onrender.com", {
-        query: {
-          userId: user._id,
-        },
-        transports: ["websocket"],
-      });
+      const socketio = io(
+        import.meta.env.VITE_BACKEND_URL || "http://localhost:3000",
+        {
+          query: {
+            userId: user._id,
+          },
+          transports: ["websocket"],
+        }
+      );
 
       dispatch(setSocket(socketio));
 

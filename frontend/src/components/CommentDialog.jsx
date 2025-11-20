@@ -22,6 +22,7 @@ const CommentDialog = ({ open, setOpen }) => {
   const dispatch = useDispatch();
   const [text, setText] = useState("");
   const [comment, setComment] = useState(selectedPost?.comments || null);
+  const backendURL = useBackendUrl();
 
   // useEffect(() => {
   //   console.log(comment);
@@ -39,7 +40,7 @@ const CommentDialog = ({ open, setOpen }) => {
   const sendMessageHandler = async () => {
     try {
       const res = await axios.post(
-        `http://localhost:3000/api/v1/post/${selectedPost._id}/comment`,
+        `${backendURL}/api/v1/post/${selectedPost._id}/comment`,
         { text },
         {
           headers: {
